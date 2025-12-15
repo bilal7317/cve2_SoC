@@ -21,21 +21,21 @@ module cve2_fetch_fifo #(
 
   // control signals
   input  logic                clear_i,   // clears the contents of the FIFO
-  output logic [NUM_REQS-1:0] busy_o,
+  output logic [NUM_REQS-1:0] busy_o,    // Busy status indicating fill level of FIFO entries
 
-  // input port
+  // input port (from memory interface)
   input  logic                in_valid_i,
-  input  logic [31:0]         in_addr_i,
-  input  logic [31:0]         in_rdata_i,
+  input  logic [31:0]         in_addr_i,  // Input address (32-bit)
+  input  logic [31:0]         in_rdata_i, // Input read data (32-bit)
   input  logic                in_err_i,
 
-  // output port
+  // output port (to instruction decode)
   output logic                out_valid_o,
-  input  logic                out_ready_i,
-  output logic [31:0]         out_addr_o,
-  output logic [31:0]         out_rdata_o,
-  output logic                out_err_o,
-  output logic                out_err_plus2_o
+  input  logic                out_ready_i, // Output ready signal from downstream consumer
+  output logic [31:0]         out_addr_o,  // Output address (PC of current instruction)
+  output logic [31:0]         out_rdata_o, // Output read data (instruction data)
+  output logic                out_err_o,   // Output error signal
+  output logic                out_err_plus2_o // Error on second half of unaligned 32-bit instruction
 );
 
   localparam int unsigned DEPTH = NUM_REQS+1;
